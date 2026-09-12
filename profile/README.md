@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/machine-contact-layer/.github/main/profile/banner.png" alt="OJOBIT" width="100%">
+</p>
+
 <h1 align="center">Machine Contact Layer</h1>
 
 <p align="center">
@@ -5,10 +9,20 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/machine-contact-layer/mcl-core">Specifications</a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-sdk">SDK</a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/conformance/ICS.md">What is claimed</a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md">Report a defect</a>
+  <a href="https://github.com/machine-contact-layer/mcl-core/actions/workflows/ci.yml">
+    <img alt="core CI" src="https://github.com/machine-contact-layer/mcl-core/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/LICENSE">
+    <img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
+  <img alt="Status: Public Candidate" src="https://img.shields.io/badge/status-Public%20Candidate-orange">
+  <img alt="freestanding C99" src="https://img.shields.io/badge/C99-freestanding-informational">
+  <img alt="8 repositories" src="https://img.shields.io/badge/repositories-8-lightgrey">
+</p>
+
+<p align="center">
+  <a href="https://github.com/machine-contact-layer/mcl-sdk/blob/main/QUICKSTART.md"><b>Quickstart</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-core"><b>Specifications</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/conformance/ICS.md"><b>What is claimed</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md"><b>Report a defect</b></a>
 </p>
 
 ---
@@ -58,6 +72,14 @@ remain *Candidate*, not Stable.
 
 Most machine communication today is not stranger communication. Building the
 layer around the exceptional case would have been the wrong shape.
+
+**On security:** MCL v1.0 carries no cryptography. The design rule is that MCL
+defines the interface a security mechanism plugs into and never the mechanism
+itself — you bring your own stack or secure element, and MCL never holds a
+private key. That interface is not in this release. Plan for your own
+authentication and confidentiality above MCL, or hand off to a protocol that
+provides them. [`SECURITY.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/SECURITY.md)
+is specific about what is and is not protected.
 
 ## The repositories
 
@@ -114,24 +136,6 @@ bootstrap, Windows and Android hosts, and ESP32-S3-class hardware.
 Negative trials and harness failures are retained as evidence rather than
 normalised into success. Every recorded digest is verified by a gate in CI.
 
-## What is not claimed
-
-This matters more than the list above, and it is written in the same words in
-every place a reader looks:
-
-```text
-NOT claimed: two ORGANISATIONS have interoperated
-NOT claimed: anyone outside this project has implemented these specifications
-NOT claimed: anyone outside this project has reviewed them
-NOT claimed: the specifications are free of defects a fresh reader would find
-```
-
-Also, plainly: **no cryptography is implemented in any repository.** MCL is
-designed to define the interface a security mechanism plugs into, never the
-mechanism — and that interface does not exist yet. Reception is not identity,
-authenticity, authority, trust, or obligation, and nothing in MCL can turn a
-claim into authority. Your policy decides, locally, always.
-
 ## Status
 
 **Public Candidate.** The specifications are frozen at the published revisions
@@ -140,9 +144,8 @@ Charter requires public external review before any Stable promotion, and
 readability is not review.
 
 A clean-room implementation — independent of the reference code, but written by
-the same author — found three real specification-reading defects. That is
-exactly why the fourth line above is worded as it is. A reader who is not the
-author will find more.
+the same author — found three real specification-reading defects. A reader who
+is not the author will find more.
 
 **If you find one, that is the contribution we want most.**
 See [`REPORTING.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md)
