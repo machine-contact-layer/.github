@@ -1,0 +1,29 @@
+# Code owners for the organization profile repository.
+#
+# This repository is ORGANIZATION INFRASTRUCTURE, not the ninth MCL component.
+# It is deliberately absent from the v1.0.0 manifest, the synchronized release
+# tags and the canonical GitHub Release: its lifecycle is configuration, not
+# protocol release.
+#
+# It still warrants review, for a reason the eight repositories do not share.
+# What is in here is the public front door, and GitHub serves the files below
+# as the DEFAULT SECURITY POLICY AND CONTRIBUTING GUIDE for every MCL
+# repository that does not define its own. Seven of the eight do not. A silent
+# change here therefore changes the published security policy of seven
+# repositories at once, without a commit appearing in any of them.
+#
+# Every line is a REVIEW requirement, not a claim of authorship. It takes
+# effect only once the branch ruleset requires code-owner review, which is
+# applied after this repository becomes public -- GitHub Free does not offer
+# protection on a private repository.
+#
+# The last matching pattern wins, so the specific paths below override the
+# catch-all.
+
+* @0j0bit @sed-boi
+
+# The public front door, and the two files that stand in for seven
+# repositories' own.
+/profile/README.md  @0j0bit
+/SECURITY.md        @0j0bit
+/CONTRIBUTING.md    @0j0bit
