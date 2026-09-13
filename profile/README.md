@@ -138,8 +138,8 @@ normalised into success. Every recorded digest is verified by a gate in CI.
 
 ## Status
 
-**Public Candidate.** The specifications are frozen at the published revisions
-and open for external review. `v1.0.0` is **not** tagged: the Architecture
+**Public Candidate.** The specifications are published and open for external
+review. `v1.0.0` is **not** tagged: the Architecture
 Charter requires public external review before any Stable promotion, and
 readability is not review.
 
