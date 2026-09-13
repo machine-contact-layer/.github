@@ -1,161 +1,127 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/machine-contact-layer/.github/main/profile/banner.png" alt="OJOBIT" width="100%">
+  <img src="https://raw.githubusercontent.com/machine-contact-layer/.github/main/profile/banner.png" alt="Machine Contact Layer (MCL) banner: black and white checkerboard with the OJOBIT wordmark" width="100%">
 </p>
 
-<h1 align="center">Machine Contact Layer</h1>
+<h1 align="center">Machine Contact Layer (MCL)</h1>
 
 <p align="center">
   <strong>A transport-independent layer for machines to meet, and to keep talking.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/machine-contact-layer/mcl-core/actions/workflows/ci.yml">
-    <img alt="core CI" src="https://github.com/machine-contact-layer/mcl-core/actions/workflows/ci.yml/badge.svg"></a>
-  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/LICENSE">
-    <img alt="License Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
-  <img alt="Status: Public Candidate" src="https://img.shields.io/badge/status-Public%20Candidate-orange">
-  <img alt="freestanding C99" src="https://img.shields.io/badge/C99-freestanding-informational">
-  <img alt="8 repositories" src="https://img.shields.io/badge/repositories-8-lightgrey">
+  Open machine-to-machine protocol and portable C99 stack for device discovery,
+  contact, transport negotiation and communication continuity across BLE, IP
+  and acoustic links.
+</p>
+
+<p align="center">
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/LICENSE"><img alt="License: Apache-2.0" src="https://img.shields.io/badge/license-Apache--2.0-blue"></a>
+  <img alt="Release status: Public Candidate" src="https://img.shields.io/badge/status-Public%20Candidate-orange">
+  <img alt="Language: freestanding C99" src="https://img.shields.io/badge/C99-freestanding-informational">
 </p>
 
 <p align="center">
   <a href="https://github.com/machine-contact-layer/mcl-sdk/blob/main/QUICKSTART.md"><b>Quickstart</b></a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-core"><b>Specifications</b></a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/conformance/ICS.md"><b>What is claimed</b></a> ·
-  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md"><b>Report a defect</b></a>
+  <a href="https://github.com/machine-contact-layer/mcl-sdk"><b>SDK</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-sdk/tree/main/examples"><b>Examples</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/SPECIFICATION_INDEX.md"><b>Specifications</b></a> ·
+  <a href="https://github.com/machine-contact-layer/mcl-core/blob/main/SECURITY.md"><b>Security</b></a>
 </p>
 
 ---
 
-Two machines end up in the same place. They may have been built by different
-companies and never designed to work together; or they may both be yours, and
-simply have no network in common at this moment. Either way there is no shared
-bus, no common credential system, and nobody around to introduce them.
-
-**MCL gives them something they can speak first** — a small, deterministic way to
-establish, maintain, validate, refuse, migrate and, when useful, hand off a
-continuing contact. What happens after that is the deployment's to decide.
+MCL lets machines establish contact even when they were built independently, do
+not start on the same network, or need to move an existing contact from one
+transport to another. It runs on a microcontroller as readily as on a server —
+freestanding C99, no heap, no libc — and leaves your application protocol, your
+admission policy and your security stack to you.
 
 ```text
-ANOTHER MACHINE
-      │  acoustic, BLE advertisement, Wi-Fi — whatever medium exists
-      ▼
-FIRST CONTACT ............ presence, capabilities, hazards
-      │
-      │  optional: negotiate a different transport
-      ▼
-CONTINUING CONTACT ....... often richer or more private — or still acoustic
-      │
-      ├─▶ STAY ON MCL ......... MCL keeps the contact: presence, capability,
-      │                         migration and refusal. NOT your payloads
-      ├─▶ SECURITY PROFILE .... optional: establish who you are talking to
-      └─▶ HAND OFF ............ your own protocol takes over
+  your application or domain protocol        MQTT · ROS 2 · DDS · HTTP · your own
+                 ▲
+                 │  hand off — or keep the contact on MCL
+                 │
+  MACHINE CONTACT LAYER                      contact · negotiation · migration · refusal
+                 │
+       ┌─────────┼──────────┬───────────┐
+      BLE        IP      acoustic      UWB (experimental)
 ```
 
-Those three endings are alternatives, not stages.
+MCL does not replace MQTT, ROS 2, DDS, HTTP or CAN. It is the layer before or
+alongside them: establishing contact, agreeing a compatible transport, refusing
+incompatible input and keeping the contact while the bearer changes.
 
-MCL is infrastructure for builders. It is not a product, a fleet manager, an
-autonomy stack, a credential authority, or a modem.
+## Use it for
 
-## Two conformance layers
-
-**`MCL Base 1`** is the v1.0 stable floor, and it is the one most deployments
-want. It covers the ordinary case of machines that **already share a bearer**:
-provisioned fleets, products paired at manufacture, fixed installations, test
-harnesses, and libraries embedded in a larger product. No discovery, no
-microphone, no cryptography required.
-
-**`MCL Stranger-Contact 1`** extends Base 1 with an optional zero-prior
-rendezvous path, for machines that share no bearer at all. It is an **ingress
-capability, not the definition of MCL** — and its acoustic and BLE profiles
-remain *Candidate*, not Stable.
-
-Most machine communication today is not stranger communication. Building the
-layer around the exceptional case would have been the wrong shape.
-
-**On security:** MCL v1.0 carries no cryptography. The design rule is that MCL
-defines the interface a security mechanism plugs into and never the mechanism
-itself — you bring your own stack or secure element, and MCL never holds a
-private key. That interface is not in this release. Plan for your own
-authentication and confidentiality above MCL, or hand off to a protocol that
-provides them. [`SECURITY.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/SECURITY.md)
-is specific about what is and is not protected.
-
-## The repositories
-
-Eight peer repositories. None is a subdirectory of another; the split is by
-authority over a specification, not by convenience.
-
-| Repository | What it owns |
-|---|---|
-| **[mcl-core](https://github.com/machine-contact-layer/mcl-core)** | Architecture charter, governance, conformance, registries, release gate. **Start here.** |
-| **[mcl-wire](https://github.com/machine-contact-layer/mcl-wire)** | The canonical deterministic byte representation of MCL semantics |
-| **[mcl-link](https://github.com/machine-contact-layer/mcl-link)** | Contact establishment, framing, sessions, addressing, migration |
-| **[mcl-sdk](https://github.com/machine-contact-layer/mcl-sdk)** | Reference SDK, examples and the developer archive |
-| **[mcl-ap](https://github.com/machine-contact-layer/mcl-ap)** | Acoustic Profile — the bootstrap medium that needs no network |
-| **[mcl-ip](https://github.com/machine-contact-layer/mcl-ip)** | IP / datagram binding |
-| **[mcl-ble](https://github.com/machine-contact-layer/mcl-ble)** | Bluetooth Low Energy binding |
-| **[mcl-uwb](https://github.com/machine-contact-layer/mcl-uwb)** | Ultra-Wideband binding *(specification only — no physical qualification)* |
-
-Transports are **bindings**. A `HAZARD` means the same thing whether it arrived
-through a loudspeaker, a Bluetooth advertisement or a UDP datagram; a binding
-never redefines semantics.
+- **Robotics** — robots and autonomous machines from different fleets meet,
+  exchange presence and transport offers, and move to a shared network or a
+  fleet protocol
+- **Embedded and IoT devices** — devices from different vendors share one
+  contact layer without a common OS, runtime or cloud service
+- **Provisioned fleets** — machines that already share a bearer use `MCL Base 1`
+  directly, with no discovery step
+- **Offline and degraded networking** — contact over BLE or sound where there is
+  no infrastructure, then migration when a better bearer appears
+- **Cross-transport systems** — one contact that starts on one link and
+  continues on another
 
 ## Start here
 
-**Building a product on it** → [`mcl-sdk/QUICKSTART.md`](https://github.com/machine-contact-layer/mcl-sdk/blob/main/QUICKSTART.md), section 04.
-The `base_arranged_bearer` example is Base 1 end to end: two machines on a
-bearer that is already there, Wire major 1 inside Link major 1, no rendezvous
-and no bearer to open.
+**Build** → [`mcl-sdk/QUICKSTART.md`](https://github.com/machine-contact-layer/mcl-sdk/blob/main/QUICKSTART.md)
+takes you from download to two machines in contact. The release ships a
+self-contained developer SDK: one CMake project, no sibling checkout.
 
-**Implementing the specifications** → [`mcl-core`](https://github.com/machine-contact-layer/mcl-core),
-then `mcl-wire` and `mcl-link`. The Implementation Contract is normative;
-the reference code is not.
+**Understand** → [`mcl-core`](https://github.com/machine-contact-layer/mcl-core)
+explains what MCL is, how it works, and where each specification lives.
 
-**Evaluating whether to trust it** → [`mcl-core/conformance/ICS.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/conformance/ICS.md)
-for what is claimed and at what level, and the release evidence index for every
-empirical claim bound to a path and a digest.
+**Implement** → the specifications, registries and conformance vectors are the
+contract; the reference code is subordinate to them. Start from
+[`SPECIFICATION_INDEX.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/SPECIFICATION_INDEX.md).
 
-## What has actually been run
+## Repositories
 
-The reference implementation targets **freestanding C99 with caller-owned
-memory** — no heap, no libc required — and is exercised across IP, BLE, acoustic
-bootstrap, Windows and Android hosts, and ESP32-S3-class hardware.
+| Repository | What it contains |
+|---|---|
+| **[mcl-core](https://github.com/machine-contact-layer/mcl-core)** | Machine semantics, protocol specifications, registries, conformance model. **Start here.** |
+| **[mcl-sdk](https://github.com/machine-contact-layer/mcl-sdk)** | Portable C99 SDK, examples, porting guide and the developer SDK package |
+| **[mcl-wire](https://github.com/machine-contact-layer/mcl-wire)** | Canonical binary encoding and deterministic decoding |
+| **[mcl-link](https://github.com/machine-contact-layer/mcl-link)** | Machine contact lifecycle, framing, sessions and transport migration |
+| **[mcl-ip](https://github.com/machine-contact-layer/mcl-ip)** | IP transport binding — MCL over UDP |
+| **[mcl-ble](https://github.com/machine-contact-layer/mcl-ble)** | Bluetooth Low Energy transport binding — GATT carriage and role derivation |
+| **[mcl-ap](https://github.com/machine-contact-layer/mcl-ap)** | Acoustic transport binding — first contact through a speaker and microphone |
+| **[mcl-uwb](https://github.com/machine-contact-layer/mcl-uwb)** | Experimental Ultra-Wideband transport binding |
 
-- **104 physical-medium changes** preserving one logical contact, including 100
-  alternating BLE/IP migrations, with **2,989 recorded checks and zero failures**
-- **Zero-prior acoustic rendezvous → policy admission → BLE migration**, verified
-  in both derived BLE role orientations, on real hardware
-- A **three-machine shared-air run** in which a competing third-party proposal
-  did not replace the selected transaction
-- The full stack running on an embedded target with **no host in the loop**,
-  decoding over air
-- **803** independent cross-implementation checks and **108** Stable profile
-  interoperability checks *(separate campaigns; they are not summed)*
+## Transports and maturity
 
-Negative trials and harness failures are retained as evidence rather than
-normalised into success. Every recorded digest is verified by a gate in CI.
+| Transport | Profile | Maturity |
+|---|---|---|
+| IP (UDP) | IP-DATAGRAM profile 1 | Stable |
+| Bluetooth Low Energy | BLE-GATT profile 1 · BLE-ACTIVATE-1 | Stable · Candidate |
+| Acoustic | AP-BOOTSTRAP-1 | Candidate |
+| Ultra-Wideband | binding draft | Research Draft |
 
-## Status
+`MCL Base 1` — machines that already share a bearer — is the Stable floor.
+`MCL Stranger-Contact 1` adds zero-prior rendezvous and is Candidate. The IP,
+BLE and acoustic bindings have run over the air between laptops, ESP32-S3
+boards and Android handsets, with raw records kept in each repository's
+evidence directories.
 
-**Public Candidate.** The specifications are published and open for external
-review. `v1.0.0` is **not** tagged: the Architecture
-Charter requires public external review before any Stable promotion, and
-readability is not review.
+## Security
 
-A clean-room implementation — independent of the reference code, but written by
-the same author — found three real specification-reading defects. A reader who
-is not the author will find more.
+MCL v1.0 provides no confidentiality, no peer authentication and no replay
+protection; a completed contact establishes reachability, not identity. MCL is
+cryptography-agnostic: run it inside something that authenticates — DTLS, LE
+Secure Connections, a controlled network — or hand off to a protocol that does.
+[`SECURITY.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/SECURITY.md)
+covers each property and how to report a vulnerability.
 
-**If you find one, that is the contribution we want most.**
-See [`REPORTING.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md)
-and [`errata/`](https://github.com/machine-contact-layer/mcl-core/tree/main/errata).
+## Contribute
 
-## Citing this work
-
-<!-- DOI-SLOT: replace this block when the preprint DOI is issued. -->
-> The MCL v1.0 paper is not yet public. A DOI and citation block will be added
-> here on publication.
+Found a defect or a specification error? See
+[`REPORTING.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/REPORTING.md).
+Changes follow
+[`CONTRIBUTING.md`](https://github.com/machine-contact-layer/mcl-core/blob/main/CONTRIBUTING.md).
+Everything is Apache-2.0.
 
 ## Contact
 
